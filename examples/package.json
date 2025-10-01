@@ -9,11 +9,15 @@
   "author": "",
   "description": "",
   "dependencies": {
+    "@dodopayments/ingestion-sdk": "file:../",
     "@ai-sdk/google": "^2.0.16",
     "@anthropic-ai/sdk": "^0.63.1",
     "ai": "^5.0.51",
     "dotenv": "^17.2.2",
     "groq-sdk": "^0.32.0",
     "openai": "^5.23.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
   }
 }
