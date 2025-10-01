@@ -194,7 +194,7 @@ const response = await client.chat.completions.create({
 ### **AI SDK (Vercel)**
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
-import { generateText, streamText } from 'ai';
+import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 
 const llmTracker = createLLMTracker({
@@ -204,7 +204,7 @@ const llmTracker = createLLMTracker({
 });
 
 const client = llmTracker.wrap({
-  client: { generateText, streamText },
+  client: { generateText },
   customerId: 'customer_123',
   metadata: { model: 'gemini-2.0-flash', feature: 'chat' }
 });
