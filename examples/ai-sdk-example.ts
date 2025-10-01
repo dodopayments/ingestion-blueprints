@@ -1,4 +1,4 @@
-import { createLLMTracker } from "@dodopayments/ingestion-sdk";
+import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
 import { generateText, streamText } from "ai";
 import { google } from "@ai-sdk/google";
 import "dotenv/config";

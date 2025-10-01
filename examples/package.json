@@ -1,5 +1,5 @@
 {
-  "name": "ingestion-sdk-examples",
+  "name": "ingestion-blueprints-examples",
   "version": "1.0.0",
   "type": "module",
   "main": "ai-sdk-simple.js",
@@ -9,7 +9,7 @@
   "author": "",
   "description": "",
   "dependencies": {
-    "@dodopayments/ingestion-sdk": "file:../",
+    "@dodopayments/ingestion-blueprints": "file:../",
     "@ai-sdk/google": "^2.0.16",
     "@anthropic-ai/sdk": "^0.63.1",
     "ai": "^5.0.51",

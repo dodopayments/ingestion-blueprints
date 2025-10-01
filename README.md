@@ -10,7 +10,7 @@ Turn any LLM API call into automatic billing events with just a few lines of cod
 
 ### 1. **Install**
 ```bash
-npm install @dodopayments/ingestion-sdk
+npm install @dodopayments/ingestion-blueprints
 ```
 ### 2. **Get your API Keys**
 - **Dodo Payments API Key**: [Dodopayments API Key](https://app.dodopayments.com/developers/api-keys)
@@ -26,7 +26,7 @@ npm install @dodopayments/ingestion-sdk
 
 ### 4. **Track Usage**
 ```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import OpenAI from 'openai';
 
 // 1. Create your OpenAI client
@@ -115,7 +115,7 @@ All examples automatically track token usage to your Dodo Payments account!
 
 ### **OpenAI** 
 ```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -141,7 +141,7 @@ const response = await client.chat.completions.create({
 
 ### **Anthropic Claude**
 ```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Anthropic from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -167,7 +167,7 @@ const response = await client.messages.create({
 
 ### **Groq (Ultra-Fast)**
 ```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Groq from 'groq-sdk';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -193,7 +193,7 @@ const response = await client.chat.completions.create({
 
 ### **AI SDK (Vercel)**
 ```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import { generateText, streamText } from 'ai';
 import { google } from '@ai-sdk/google';
 
@@ -333,7 +333,7 @@ const tracker = createLLMTracker({
 
 ```javascript
 import express from 'express';
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import OpenAI from 'openai';
 
 const app = express();

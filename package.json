@@ -1,8 +1,8 @@
 {
-  "name": "@dodopayments/ingestion-sdk",
+  "name": "@dodopayments/ingestion-blueprints",
   "version": "1.0.0",
   "type": "module",
-  "description": "Sophisticated Dodo Payments Ingestion SDK",
+  "description": "Sophisticated Dodo Payments Ingestion Blueprints",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {

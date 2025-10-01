@@ -1,4 +1,4 @@
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Groq from 'groq-sdk';
 import "dotenv/config";
 
