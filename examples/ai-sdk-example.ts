@@ -1,5 +1,5 @@
 import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
-import { generateText, streamText } from "ai";
+import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import "dotenv/config";
 
@@ -16,7 +16,7 @@ async function aiSdkExample() {
 
     // 2. Wrap the ai-sdk methods
     const client = llmTracker.wrap({
-      client: { generateText, streamText },
+      client: { generateText },
       customerId: "customer_123",
       metadata: {
         model: "gemini-2.0-flash",
