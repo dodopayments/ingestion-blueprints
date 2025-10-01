@@ -1,23 +1,4 @@
-/**
- * Groq Example - Fast LLM Token Tracking
- * 
- * SETUP REQUIREMENTS:
- * 1. Set environment variables:
- *    export GROQ_API_KEY="your_groq_api_key_here"  
- *    export DODO_API_KEY="your_dodo_payments_api_key_here"
- * 
- * 2. In Dodo Payments Dashboard, create a meter:
- *    - Event Name: "your_meter_event_name"
- *    - Aggregation: "sum" 
- *    - Over Property: "totalTokens"
- *    - Unit: "tokens"
- * 
- * 3. Install dependencies: npm install groq-sdk
- * 
- * 4. Run: node examples/groq-example.js
- */
-
-import { createLLMTracker } from '../dist/index.js';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Groq from 'groq-sdk';
 import "dotenv/config";
 
@@ -32,7 +13,7 @@ async function groqExample() {
 
     // 2. Create tracker ONCE
     const llmTracker = createLLMTracker({
-      apiKey: process.env.DODO_PAYMENTS_API_KEY,
+      apiKey: process.env.DODO_PAYMENTS_API_KEY!,
       environment: 'test_mode',
       eventName: 'your_meter_event_name',
     });
@@ -40,7 +21,7 @@ async function groqExample() {
     console.log('📡 Setting up Groq client with tracking...');
 
     // 3. Wrap client for automatic tracking
-    const trackedGroq = llmTracker.wrap({ 
+    const trackedGroq = llmTracker.wrap({
       client: groq, 
       customerId: 'customer_123',
       metadata: {
@@ -73,19 +54,9 @@ async function groqExample() {
     console.log('\n📊 Token Usage:');
     console.log(response.usage);
     console.log('\n✅ Usage automatically tracked to Dodo Payments!');
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error:', error.message);
-    
-    if (error.message.includes('api key')) {
-      console.log('\n💡 Tip: Make sure to set your GROQ_API_KEY environment variable');
-      console.log('   Get your API key from: https://console.groq.com/keys');
-    }
   }
 }
 
-// Run if this file is executed directly
-if (process.argv[1] && process.argv[1].endsWith('groq-example.js')) {
-  groqExample().catch(console.error);
-}
-
-export { groqExample };
+groqExample().catch(console.error);

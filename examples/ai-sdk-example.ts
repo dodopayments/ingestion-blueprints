@@ -1,23 +1,4 @@
-/**
- * AI SDK Example - Clean Solution
- *
- * SETUP REQUIREMENTS:
- * 1. Set environment variables:
- *    export GOOGLE_GENERATIVE_AI_API_KEY="your_google_api_key_here"
- *    export DODO_PAYMENTS_API_KEY="your_dodo_payments_api_key_here"
- *
- * 2. In Dodo Payments Dashboard, create a meter:
- *    - Event Name: "your_meter_event_name"
- *    - Aggregation: "sum"
- *    - Over Property: "totalTokens"
- *    - Unit: "tokens"
- *
- * 3. Install dependencies: npm install ai @ai-sdk/google
- *
- * 4. Run: node examples/ai-sdk-example.js
- */
-
-import { createLLMTracker } from "../dist/index.js";
+import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
 import { generateText, streamText } from "ai";
 import { google } from "@ai-sdk/google";
 import "dotenv/config";
@@ -28,7 +9,7 @@ async function aiSdkExample() {
   try {
     // 1. Create tracker
     const llmTracker = createLLMTracker({
-      apiKey: process.env.DODO_PAYMENTS_API_KEY,
+      apiKey: process.env.DODO_PAYMENTS_API_KEY!,
       environment: "test_mode",
       eventName: "your_meter_event_name",
     });
@@ -60,9 +41,4 @@ async function aiSdkExample() {
   }
 }
 
-// Run if this file is executed directly
-if (process.argv[1] && process.argv[1].endsWith("ai-sdk-example.js")) {
-  aiSdkExample().catch(console.error);
-}
-
-export { aiSdkExample };
+aiSdkExample().catch(console.error);

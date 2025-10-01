@@ -1,23 +1,4 @@
-/**
- * Anthropic Claude Example
- * 
- * SETUP REQUIREMENTS:
- * 1. Set environment variables:
- *    export ANTHROPIC_API_KEY="your_anthropic_api_key_here"  
- *    export DODO_PAYMENTS_API_KEY="your_dodo_payments_api_key_here"
- * 
- * 2. In Dodo Payments Dashboard, create a meter:
- *    - Event Name: "your_meter_event_name"
- *    - Aggregation: "sum" 
- *    - Over Property: "totalTokens"
- *    - Unit: "tokens"
- * 
- * 3. Install dependencies: npm install @anthropic-ai/sdk
- * 
- * 4. Run: node examples/anthropic-example.js
- */
-
-import { createLLMTracker } from '../dist/index.js';
+import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Anthropic from '@anthropic-ai/sdk';
 import "dotenv/config";
 
@@ -32,7 +13,7 @@ async function anthropicExample() {
 
     // 2. Create tracker ONCE
     const llmTracker = createLLMTracker({
-      apiKey: process.env.DODO_PAYMENTS_API_KEY,
+      apiKey: process.env.DODO_PAYMENTS_API_KEY!,
       environment: 'test_mode',
       eventName: 'your_meter_event_name',
     });
@@ -64,12 +45,12 @@ async function anthropicExample() {
     });
 
     console.log('🤖 Claude Response:');
-    console.log(response.content[0].text);
+    console.log(response);
     console.log('\n📊 Token Usage:');
     console.log(response.usage);
     console.log('\n✅ Usage automatically tracked to Dodo Payments!');
     console.log('🏷️  Event tagged with provider: anthropic');
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error:', error.message);
     
     if (error.message.includes('api key')) {
@@ -79,9 +60,4 @@ async function anthropicExample() {
   }
 }
 
-// Run if this file is executed directly
-if (process.argv[1] && process.argv[1].endsWith('anthropic-example.js')) {
-  anthropicExample().catch(console.error);
-}
-
-export { anthropicExample };
+anthropicExample().catch(console.error);
