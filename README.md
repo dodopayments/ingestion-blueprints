@@ -2,128 +2,140 @@
 
 **Effortlessly track LLM token usage for usage-based billing**
 
-Turn any LLM API call into automatic billing events with just few lines of code. Works with OpenAI, Anthropic, Groq, and AI SDK!
+Turn any LLM API call into automatic billing events with just a few lines of code. Works with OpenAI, Anthropic, Groq, and AI SDK!
 
 ---
 
-## ⚡ **Quick Start (2 minutes)**
+## ⚡ **Quick Start**
 
 ### 1. **Install**
 ```bash
 npm install @dodopayments/ingestion-sdk
 ```
-
-### 2. **Get Your API Keys**
-- **Dodo Payments API Key**: Get it from [DodoPayments API Keys](https://app.dodopayments.com/developer/api-keys)
-- **LLM Provider API Key**: From OpenAI, Anthropic, Groq, etc.
+### 2. **Get your API Keys**
+- **Dodo Payments API Key**: [Dodopayments API Key](https://app.dodopayments.com/developers/api-keys)
+- **LLM Provider API Key**: From your LLM provider (e.g. OpenAI, Anthropic, Groq, etc.)
 
 ### 3. **Set Up Dodo Payments Meter**
-- **Login** to [DodoPayments Dashboard](https://app.dodopayments.com/)
-- **Go to** Products → Meters
-- **Create a new meter** and note the event name you choose
-- **Set "Over Property"** to track what you need:
-   - `inputTokens` - Track input/prompt tokens only
-   - `outputTokens` - Track output/completion tokens only  
-   - `totalTokens` - Track combined input + output tokens
+1. Login to [DodoPayments Dashboard](https://app.dodopayments.com/)
+2. Go to Products → Meters
+3. Create a new meter with:
+   - **Event Name**: `your_meter_event_name` (you'll use this in code)
+   - **Aggregation**: `sum`
+   - **Over Property**: Choose `totalTokens`, `inputTokens`, or `outputTokens`
 
 ### 4. **Track Usage**
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
 import OpenAI from 'openai';
 
-// 1️⃣ Create your LLM client (normal way)
-const openai = new OpenAI({ apiKey: 'your_openai_key' });
+// 1. Create your OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
-// 2️⃣ Create tracker ONCE at startup
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_key',
+// 2. Create tracker ONCE
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'test_mode',
-  eventName: 'llm.chat_completion'  // Match your meter name
+  eventName: 'your_meter_event_name',
 });
 
-// 3️⃣ Wrap & use - automatic tracking!
-const trackedClient = tracker.wrap({ 
+// 3. Wrap client for automatic tracking
+const client = llmTracker.wrap({ 
   client: openai, 
-  customerId: 'customer_123' 
+  customerId: 'customer_123',
+  metadata: {
+    provider: 'openai',
+    feature: 'chat_completion'
+  }
 });
 
-const response = await trackedClient.chat.completions.create({
-  model: 'gpt-4',
-  messages: [{ role: 'user', content: 'Hello!' }]
+// 4. Use normally - tracking happens automatically
+const response = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Hello!' }],
+  max_tokens: 500
 });
 
-// ✨ Usage automatically sent to Dodo Payments for billing!
+console.log(response.choices[0].message.content);
+console.log(response.usage);
+// ✨ Usage automatically tracked to Dodo Payments!
 ```
 
 **That's it!** 🎉 Every API call now automatically tracks token usage.
 
-## 📋 **Step-by-Step Setup Guide**
+## 🧪 **Try It Yourself**
 
-### **Step 1: Set Up Dodo Payments Meter**
+We've included working examples you can run immediately:
 
-1. **Login** to [DodoPayments Dashboard](https://app.dodopayments.com/)
-2. **Go to** Products → Meters
-3. **Create a new meter** and note the event name you choose
-4. **Set "Over Property"** to track what you need:
-   - `inputTokens` - Track input/prompt tokens only
-   - `outputTokens` - Track output/completion tokens only  
-   - `totalTokens` - Track combined input + output tokens
+### **Run Examples**
 
-### **Step 2: Use the SDK**
+1. Make sure your dodopayments meter is set up and you have your API keys.
 
-```bash
-npm install @dodopayments/ingestion-sdk
-```
+2. **Clone and install**:
+   ```bash
+   git clone https://github.com/dodopayments/ingestion-blueprints.git
+   cd ingestion-blueprints
+   npm install
+   ```
 
-```javascript
-import { createLLMTracker } from '@dodopayments/ingestion-sdk';
-import OpenAI from 'openai';
+3. **Build the SDK**:
+   ```bash
+   npm run build
+   ```
 
-// Wrap your LLM client  
-const openai = new OpenAI({ apiKey: 'your_openai_key' });
+4. **Set up environment variables** in `examples/.env`:
+   ```bash
+   DODO_PAYMENTS_API_KEY=your_dodo_key_here
+   OPENAI_API_KEY=your_openai_key_here
+   ANTHROPIC_API_KEY=your_anthropic_key_here
+   GROQ_API_KEY=your_groq_key_here
+   GOOGLE_GENERATIVE_AI_API_KEY=your_google_key_here
+   ```
 
-// Create tracker once
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_api_key',
-  environment: 'test_mode',
-  eventName: 'your_meter_event_name'  // From step 1
-});
+5. Set eventName in each example file to match your Dodo Payments meter's event name.
 
-// Wrap your LLM client
-const trackedClient = tracker.wrap({ 
-  client: openai, 
-  customerId: 'customer_123' 
-});
+6. **Run an example**:
+   ```bash
+   cd examples
+   npm install
 
-// Use normally - automatic tracking!
-const response = await trackedClient.chat.completions.create({
-  model: 'gpt-4',
-  messages: [{ role: 'user', content: 'Hello!' }]
-});
-```
+   npx tsx openai-example.ts      # OpenAI example
+   npx tsx anthropic-example.ts   # Anthropic example  
+   npx tsx groq-example.ts        # Groq example
+   npx tsx ai-sdk-example.ts      # AI SDK example
+   ```
+
+All examples automatically track token usage to your Dodo Payments account!
 
 ---
 
-## 🤖 **Supported LLM Providers**
+## 🤖 **Supported Providers**
 
 ### **OpenAI** 
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
 import OpenAI from 'openai';
 
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_api_key',
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'test_mode',
-  eventName: 'openai.usage'
+  eventName: 'your_meter_event_name',
 });
 
-const openai = new OpenAI({ apiKey: 'sk-...' });
-const tracked = tracker.wrap({ client: openai, customerId: 'user123' });
+const client = llmTracker.wrap({ 
+  client: openai, 
+  customerId: 'customer_123',
+  metadata: { provider: 'openai', feature: 'chat_completion' }
+});
 
-// All methods work automatically:
-await tracked.chat.completions.create({
-  model: 'gpt-4',
-  messages: [{ role: 'user', content: 'Hello!' }]
+const response = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Hello!' }],
+  max_tokens: 500
 });
 ```
 
@@ -132,18 +144,24 @@ await tracked.chat.completions.create({
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
 import Anthropic from '@anthropic-ai/sdk';
 
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_api_key',
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'test_mode',
-  eventName: 'anthropic.usage'
+  eventName: 'your_meter_event_name',
 });
 
-const anthropic = new Anthropic({ apiKey: 'ant-...' });
-const tracked = tracker.wrap({ client: anthropic, customerId: 'user123' });
+const client = llmTracker.wrap({ 
+  client: anthropic, 
+  customerId: 'customer_123',
+  metadata: { provider: 'anthropic', feature: 'chat_completion' }
+});
 
-await tracked.messages.create({
-  model: 'claude-3-opus-20240229',
-  messages: [{ role: 'user', content: 'Hello Claude!' }]
+const response = await client.messages.create({
+  model: 'claude-sonnet-4-0',
+  max_tokens: 500,
+  messages: [{ role: 'user', content: 'Hello!' }]
 });
 ```
 
@@ -152,39 +170,49 @@ await tracked.messages.create({
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
 import Groq from 'groq-sdk';
 
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_api_key',
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'test_mode',
-  eventName: 'groq.usage'
+  eventName: 'your_meter_event_name',
 });
 
-const groq = new Groq({ apiKey: 'gsk-...' });
-const tracked = tracker.wrap({ client: groq, customerId: 'user123' });
+const client = llmTracker.wrap({
+  client: groq, 
+  customerId: 'customer_123',
+  metadata: { provider: 'groq', feature: 'chat_completion' }
+});
 
-await tracked.chat.completions.create({
+const response = await client.chat.completions.create({
+  messages: [{ role: 'user', content: 'Hello!' }],
   model: 'llama-3.1-8b-instant',
-  messages: [{ role: 'user', content: 'Hello!' }]
+  max_tokens: 150
 });
 ```
 
-### **AI SDK (Universal)**
+### **AI SDK (Vercel)**
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
-import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { generateText, streamText } from 'ai';
+import { google } from '@ai-sdk/google';
 
-const tracker = createLLMTracker({
-  apiKey: 'your_dodo_payments_api_key',
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'test_mode',
-  eventName: 'ai-sdk.usage'
+  eventName: 'your_meter_event_name',
 });
 
-const aiSdk = { generateText };
-const tracked = tracker.wrap({ client: aiSdk, customerId: 'user123' });
+const client = llmTracker.wrap({
+  client: { generateText, streamText },
+  customerId: 'customer_123',
+  metadata: { model: 'gemini-2.0-flash', feature: 'chat' }
+});
 
-await tracked.generateText({
-  model: openai('gpt-4'),
-  prompt: 'Hello world'
+const response = await client.generateText({
+  model: google('gemini-2.0-flash'),
+  prompt: 'Hello!',
+  maxOutputTokens: 500
 });
 ```
 
@@ -216,21 +244,42 @@ const trackedClient = tracker.wrap({
 
 ---
 
-## 🏃‍♂️ **Advanced Usage**
+## 🏃 **Advanced Usage**
 
 ### **Multiple Providers**
 ```javascript
-// Set up different trackers for different providers
-const openaiTracker = createLLMTracker({
+// Track different providers separately
+const llmTrackerOpenAI = createLLMTracker({
   apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'live_mode',
-  eventName: 'openai.usage'
+  eventName: 'openai_usage'
 });
 
-const groqTracker = createLLMTracker({
+const llmTrackerGroq = createLLMTracker({
   apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'live_mode', 
-  eventName: 'groq.usage'
+  eventName: 'groq_usage'
+});
+```
+
+### **Dynamic Customer IDs**
+```javascript
+// Wrap per request with different customers
+app.post('/chat', async (req, res) => {
+  const { message, userId } = req.body;
+  
+  const client = llmTracker.wrap({
+    client: openai,
+    customerId: userId,
+    metadata: { endpoint: '/chat' }
+  });
+  
+  const response = await client.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [{ role: 'user', content: message }]
+  });
+  
+  res.json({ message: response.choices[0].message.content });
 });
 ```
 
@@ -280,47 +329,43 @@ const tracker = createLLMTracker({
 
 ---
 
-## 📋 **Complete Examples**
+## 📋 **Express.js Example**
 
-### **Express.js API**
 ```javascript
 import express from 'express';
 import { createLLMTracker } from '@dodopayments/ingestion-sdk';
 import OpenAI from 'openai';
 
 const app = express();
+app.use(express.json());
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Create tracker once at startup
-const tracker = createLLMTracker({
+const llmTracker = createLLMTracker({
   apiKey: process.env.DODO_PAYMENTS_API_KEY,
   environment: 'live_mode',
-  eventName: 'api.chat_completion'
+  eventName: 'api_chat_completion'
 });
 
 app.post('/chat', async (req, res) => {
-  try {
-    const { message, userId } = req.body;
-    
-    // Wrap client for this request
-    const trackedClient = tracker.wrap({
-      client: openai,
-      customerId: userId,
-      metadata: { endpoint: '/chat' }
-    });
-    
-    const response = await trackedClient.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: message }]
-    });
-    
-    res.json({ 
-      message: response.choices[0].message.content,
-      usage: response.usage // Token counts for debugging
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  const { message, userId } = req.body;
+  
+  const client = llmTracker.wrap({
+    client: openai,
+    customerId: userId,
+    metadata: { endpoint: '/chat' }
+  });
+  
+  const response = await client.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [{ role: 'user', content: message }],
+    max_tokens: 500
+  });
+  
+  res.json({ 
+    message: response.choices[0].message.content,
+    usage: response.usage
+  });
 });
 
 app.listen(3000);
