@@ -9,9 +9,10 @@
   "author": "",
   "description": "",
   "dependencies": {
-    "@dodopayments/ingestion-blueprints": "file:../",
     "@ai-sdk/google": "^2.0.16",
     "@anthropic-ai/sdk": "^0.63.1",
+    "@dodopayments/ingestion-blueprints": "file:../",
+    "@google/genai": "^1.22.0",
     "ai": "^5.0.51",
     "dotenv": "^17.2.2",
     "groq-sdk": "^0.32.0",

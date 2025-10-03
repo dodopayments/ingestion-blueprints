@@ -77,6 +77,20 @@ export class LLMTracker {
    * Extract token usage from common LLM response formats.
    */
   private extractUsage(response: any): TokenUsage | null {
+    // Google GenAI format
+    if (response?.usageMetadata) {
+      const usage = response.usageMetadata;
+      const inputTokens = usage.promptTokenCount || 0;
+      const outputTokens = usage.candidatesTokenCount || 0;
+      const totalTokens = usage.totalTokenCount || (inputTokens + outputTokens);
+      return {
+        inputTokens,
+        outputTokens,
+        totalTokens,
+        model: response.modelVersion || 'unknown'
+      };
+    }
+
     if (!response?.usage) {
       return null;
     }
