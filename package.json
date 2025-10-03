@@ -1,6 +1,6 @@
 {
   "name": "@dodopayments/ingestion-blueprints",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "Sophisticated Dodo Payments Ingestion Blueprints",
   "main": "./dist/index.cjs",

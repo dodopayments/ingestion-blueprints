@@ -1,22 +1,37 @@
-# 🚀 Dodo Payments Ingestion SDK
+# Ingestion Blueprints
 
-**Effortlessly track LLM token usage for usage-based billing**
+<p align="center">
+  <img src="./.github/cover.png" alt="Ingestion Blueprints Cover" width="100%" />
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@dodopayments/ingestion-blueprints">
+    <img src="https://img.shields.io/npm/v/@dodopayments/ingestion-blueprints?color=cb3837&label=npm&logo=npm" alt="npm version" />
+  </a>
+  <a href="https://discord.gg/bYqAp4ayYh">
+    <img src="https://img.shields.io/discord/1305511580854779984?label=Join%20Discord&logo=discord" alt="Join Discord" />
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-GPLv3-blue.svg" alt="License: GPLv3" />
+  </a>
+</p>
 
 Turn any LLM API call into automatic billing events with just a few lines of code. Works with OpenAI, Anthropic, Groq, and AI SDK!
 
 ---
 
-## ⚡ **Quick Start**
+## Quick Start
 
-### 1. **Install**
+### 1. Install
 ```bash
 npm install @dodopayments/ingestion-blueprints
 ```
-### 2. **Get your API Keys**
+
+### 2. Get your API Keys
 - **Dodo Payments API Key**: [Dodopayments API Key](https://app.dodopayments.com/developers/api-keys)
 - **LLM Provider API Key**: From your LLM provider (e.g. OpenAI, Anthropic, Groq, etc.)
 
-### 3. **Set Up Dodo Payments Meter**
+### 3. Set Up Dodo Payments Meter
 1. Login to [DodoPayments Dashboard](https://app.dodopayments.com/)
 2. Go to Products → Meters
 3. Create a new meter with:
@@ -24,7 +39,7 @@ npm install @dodopayments/ingestion-blueprints
    - **Aggregation**: `sum`
    - **Over Property**: Choose `totalTokens`, `inputTokens`, or `outputTokens`
 
-### 4. **Track Usage**
+### 4. Track Usage
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import OpenAI from 'openai';
@@ -60,16 +75,16 @@ const response = await client.chat.completions.create({
 
 console.log(response.choices[0].message.content);
 console.log(response.usage);
-// ✨ Usage automatically tracked to Dodo Payments!
+// Usage automatically tracked to Dodo Payments!
 ```
 
-**That's it!** 🎉 Every API call now automatically tracks token usage.
+**That's it!** Every API call now automatically tracks token usage.
 
-## 🧪 **Try It Yourself**
+## Try It Yourself
 
 We've included working examples you can run immediately:
 
-### **Run Examples**
+### Run Examples
 
 1. Make sure your dodopayments meter is set up and you have your API keys.
 
@@ -111,9 +126,9 @@ All examples automatically track token usage to your Dodo Payments account!
 
 ---
 
-## 🤖 **Supported Providers**
+## Supported Providers
 
-### **OpenAI** 
+### OpenAI
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import OpenAI from 'openai';
@@ -139,7 +154,7 @@ const response = await client.chat.completions.create({
 });
 ```
 
-### **Anthropic Claude**
+### Anthropic Claude
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Anthropic from '@anthropic-ai/sdk';
@@ -165,7 +180,7 @@ const response = await client.messages.create({
 });
 ```
 
-### **Groq (Ultra-Fast)**
+### Groq (Ultra-Fast)
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Groq from 'groq-sdk';
@@ -191,7 +206,7 @@ const response = await client.chat.completions.create({
 });
 ```
 
-### **AI SDK (Vercel)**
+### AI SDK (Vercel)
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import { generateText } from 'ai';
@@ -218,9 +233,9 @@ const response = await client.generateText({
 
 ---
 
-## 🔧 **Configuration Options**
+## Configuration Options
 
-### **Tracker Configuration**
+### Tracker Configuration
 ```javascript
 const tracker = createLLMTracker({
   apiKey: string,              // Required: Dodo Payments API key
@@ -229,7 +244,7 @@ const tracker = createLLMTracker({
 });
 ```
 
-### **Per-Request Options**
+### Per-Request Options
 ```javascript
 const trackedClient = tracker.wrap({
   client: yourLLMClient,       // Required: Your LLM client
@@ -244,9 +259,9 @@ const trackedClient = tracker.wrap({
 
 ---
 
-## 🏃 **Advanced Usage**
+## Advanced Usage
 
-### **Multiple Providers**
+### Multiple Providers
 ```javascript
 // Track different providers separately
 const llmTrackerOpenAI = createLLMTracker({
@@ -262,7 +277,7 @@ const llmTrackerGroq = createLLMTracker({
 });
 ```
 
-### **Dynamic Customer IDs**
+### Dynamic Customer IDs
 ```javascript
 // Wrap per request with different customers
 app.post('/chat', async (req, res) => {
@@ -283,7 +298,7 @@ app.post('/chat', async (req, res) => {
 });
 ```
 
-## 📊 **What Gets Tracked**
+## What Gets Tracked
 
 Every LLM API call automatically sends this data to Dodo Payments:
 
@@ -305,13 +320,13 @@ Every LLM API call automatically sends this data to Dodo Payments:
 
 ---
 
-## 🚨 **Troubleshooting**
+## Troubleshooting
 
-### **Common Issues**
+### Common Issues
 
-**❌ "API key invalid"**
+**"API key invalid"**
 ```javascript
-// ✅ Make sure you're using the right environment
+// Make sure you're using the right environment
 const tracker = createLLMTracker({
   apiKey: 'your_key_here',
   environment: 'test_mode',  // Use 'live_mode' for production
@@ -319,17 +334,17 @@ const tracker = createLLMTracker({
 });
 ```
 
-**❌ "Event name not found"**
+**"Event name not found"**
 - Check your event name matches exactly what's in your Dodo Payments meter
 - Event names are case-sensitive
 
-**❌ "No usage data tracked"**
+**"No usage data tracked"**
 - Make sure your LLM provider returns usage data in the response
 - Some models/endpoints don't include token counts
 
 ---
 
-## 📋 **Express.js Example**
+## Express.js Example
 
 ```javascript
 import express from 'express';
@@ -371,15 +386,32 @@ app.post('/chat', async (req, res) => {
 app.listen(3000);
 ```
 
+## Why This SDK?
 
-## ✨ **Why This SDK?**
-
-✅ **Zero Setup Complexity** - Works out of the box  
-✅ **No Reinitialization** - Set up once, use everywhere  
-✅ **Universal Provider Support** - OpenAI, Anthropic, Groq, and AI-SDK  
-✅ **Type-Safe** - Full TypeScript support  
-✅ **Performance Optimized** - Minimal overhead
+- **Zero Setup Complexity** - Works out of the box  
+- **No Reinitialization** - Set up once, use everywhere  
+- **Universal Provider Support** - OpenAI, Anthropic, Groq, and AI-SDK  
+- **Type-Safe** - Full TypeScript support  
+- **Performance Optimized** - Minimal overhead
 
 **Perfect for:** SaaS apps, AI chatbots, content generation tools, any LLM-powered application that needs usage-based billing.
 
 ---
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## Security
+
+Please report security vulnerabilities to security@dodopayments.com. See our [Security Policy](SECURITY.md) for more information.
+
+## Support
+
+- 📧 Email: support@dodopayments.com
+- 💬 Discord: [Join our Discord](https://discord.gg/bYqAp4ayYh)
+- 📖 Documentation: [Dodo Payments Docs](https://docs.dodopayments.com)

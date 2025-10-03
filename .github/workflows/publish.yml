@@ -1,0 +1,52 @@
+name: Publish to npm on tag
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 'latest'
+
+      - name: Verify tag matches package.json version
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "TAG_NAME=${TAG_NAME}"
+          TAG_STRIPPED="${TAG_NAME#v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Parsed tag version: ${TAG_STRIPPED}"
+          echo "package.json version: ${PKG_VERSION}"
+          if [ "${TAG_STRIPPED}" != "${PKG_VERSION}" ]; then
+            echo "::error::Tag version (${TAG_STRIPPED}) does not match package.json version (${PKG_VERSION})"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
