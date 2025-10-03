@@ -26,19 +26,14 @@ jobs:
         with:
           bun-version: 'latest'
 
-      - name: Verify tag matches package.json version
+      - name: Update package.json version from GitHub release tag
         env:
           TAG_NAME: ${{ github.ref_name }}
         run: |
           echo "TAG_NAME=${TAG_NAME}"
           TAG_STRIPPED="${TAG_NAME#v}"
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          echo "Parsed tag version: ${TAG_STRIPPED}"
-          echo "package.json version: ${PKG_VERSION}"
-          if [ "${TAG_STRIPPED}" != "${PKG_VERSION}" ]; then
-            echo "::error::Tag version (${TAG_STRIPPED}) does not match package.json version (${PKG_VERSION})"
-            exit 1
-          fi
+          echo "Updating package.json version to: ${TAG_STRIPPED}"
+          npm version ${TAG_STRIPPED} --no-git-tag-version
 
       - name: Install dependencies
         run: bun install
