@@ -100,27 +100,32 @@ We've included working examples you can run immediately:
    npm run build
    ```
 
+
 4. **Set up environment variables** in `examples/.env`:
-   ```bash
-   DODO_PAYMENTS_API_KEY=your_dodo_key_here
-   OPENAI_API_KEY=your_openai_key_here
-   ANTHROPIC_API_KEY=your_anthropic_key_here
-   GROQ_API_KEY=your_groq_key_here
-   GOOGLE_GENERATIVE_AI_API_KEY=your_google_key_here
-   ```
+    ```bash
+    DODO_PAYMENTS_API_KEY=your_dodo_key_here
+    OPENAI_API_KEY=your_openai_key_here
+    ANTHROPIC_API_KEY=your_anthropic_key_here
+    GROQ_API_KEY=your_groq_key_here
+    GOOGLE_GENERATIVE_AI_API_KEY=your_google_key_here
+    OPENROUTER_API_KEY=your_openrouter_api_key_here
+    ```
 
 5. Set eventName in each example file to match your Dodo Payments meter's event name.
 
 6. **Run an example**:
-   ```bash
-   cd examples
-   npm install
+  ```bash
+  cd examples
+  npm install
 
-   npx tsx openai-example.ts      # OpenAI example
-   npx tsx anthropic-example.ts   # Anthropic example  
-   npx tsx groq-example.ts        # Groq example
-   npx tsx ai-sdk-example.ts      # AI SDK example
-   ```
+  npx tsx openai-example.ts         #OpenAI example
+  npx tsx anthropic-example.ts      #Anthropic example  
+  npx tsx groq-example.ts           #Groq example
+  npx tsx ai-sdk-example.ts         #AI SDK example
+  npx tsx google-genai-example.ts   #Google GenAI example
+  npx tsx openrouter-example.ts     #OpenRouter example
+  ```
+  
 
 All examples automatically track token usage to your Dodo Payments account!
 
@@ -180,7 +185,7 @@ const response = await client.messages.create({
 });
 ```
 
-### Groq (Ultra-Fast)
+### Groq
 ```javascript
 import { createLLMTracker } from '@dodopayments/ingestion-blueprints';
 import Groq from 'groq-sdk';
@@ -229,6 +234,70 @@ const response = await client.generateText({
   prompt: 'Hello!',
   maxOutputTokens: 500
 });
+```
+
+### Google GenAI (Gemini)
+```javascript
+import { GoogleGenAI } from "@google/genai";
+import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
+import "dotenv/config";
+
+const googleGenai = new GoogleGenAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+});
+
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
+  environment: "test_mode",
+  eventName: "your_meter_event_name",
+});
+
+const client = llmTracker.wrap({
+  client: googleGenai,
+  customerId: "customer_123",
+});
+
+const response = await client.models.generateContent({
+  model: "gemini-2.5-flash",
+  contents: "Why is the sky blue?",
+});
+
+console.log(response.text);
+console.log(response.usageMetadata);
+// Usage automatically tracked to Dodo Payments!
+```
+
+### OpenRouter
+```javascript
+import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
+import client, { OpenAI } from "openai";
+import "dotenv/config";
+
+const openrouter = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+const llmTracker = createLLMTracker({
+  apiKey: process.env.DODO_PAYMENTS_API_KEY,
+  environment: "test_mode",
+  eventName: "your_meter_event_name",
+});
+
+const client = llmTracker.wrap({
+  client: openrouter,
+  customerId: "customer_123",
+});
+
+const response = await client.chat.completions.create({
+  model: "x-ai/grok-4-fast:free",
+  messages: [{ role: "user", content: "Explain the theory of relativity in simple terms." }],
+  max_tokens: 500,
+});
+
+console.log(response.choices[0].message.content);
+console.log(response.usage);
+// Usage automatically tracked to Dodo Payments!
 ```
 
 ---
