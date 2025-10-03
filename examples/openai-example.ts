@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import "dotenv/config";
 
 async function openaiExample() {
-  console.log('🚀 Simple Usage Example - Problem Solved!\n');
+  console.log('🚀 Simple Usage Example\n');
 
   try {
     // 1. Create your OpenAI client

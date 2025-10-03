@@ -4,7 +4,7 @@ import { google } from "@ai-sdk/google";
 import "dotenv/config";
 
 async function aiSdkExample() {
-  console.log("🤖 AI SDK Simple Usage Example - Problem Solved!\n");
+  console.log("🤖 AI SDK Simple Usage Example\n");
 
   try {
     // 1. Create tracker

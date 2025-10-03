@@ -3,7 +3,7 @@ import Groq from 'groq-sdk';
 import "dotenv/config";
 
 async function groqExample() {
-  console.log('🚀 Groq Usage Example - Lightning Fast LLMs!\n');
+  console.log('🚀 Groq Usage Example\n');
 
   try {
     // 1. Create your Groq client
