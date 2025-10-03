@@ -3,7 +3,7 @@ import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
 import "dotenv/config";
 
 async function main() {
-  console.log("🤖 Google Gemini Example - Advanced AI Assistant!\n");
+  console.log("🤖 Google Gemini Example\n");
 
   // 1. Create your Google GenAI client
   const googleGenai = new GoogleGenAI({

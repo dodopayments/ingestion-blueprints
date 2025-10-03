@@ -3,7 +3,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import "dotenv/config";
 
 async function anthropicExample() {
-  console.log('🤖 Anthropic Claude Example - Advanced AI Assistant!\n');
+  console.log('🤖 Anthropic Claude Example\n');
 
   try {
     // 1. Create your Anthropic client

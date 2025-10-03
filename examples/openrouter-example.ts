@@ -4,9 +4,8 @@ import client, { OpenAI } from "openai";
 import "dotenv/config";
 
 async function openrouterExample() {
-  console.log("🚀 OpenRouter Usage Example - Open Source Models!\n");
-    try {
-        
+  console.log("🚀 OpenRouter Usage Example\n");
+  try {
     // 1. Create your OpenRouter client (using OpenAI SDK)
     const openrouter = new OpenAI({
       baseURL: "https://openrouter.ai/api/v1",
