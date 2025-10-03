@@ -1,6 +1,5 @@
 import { createLLMTracker } from "@dodopayments/ingestion-blueprints";
-
-import client, { OpenAI } from "openai";
+import OpenAI from "openai";
 import "dotenv/config";
 
 async function openrouterExample() {
@@ -27,7 +26,7 @@ async function openrouterExample() {
 
     // 4. Use OpenRouter normally - tracking happens automatically
     const response = await client.chat.completions.create({
-      model: "x-ai/grok-4-fast:free",
+      model: "qwen/qwen3-max",
       messages: [{ role: "user", content: "Explain the theory of relativity in simple terms." }],
       max_tokens: 500,
     });
