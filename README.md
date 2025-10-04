@@ -386,6 +386,8 @@ Every LLM API call automatically sends this data to Dodo Payments:
 }
 ```
 
+**Note:** For models with reasoning capabilities, `outputTokens` automatically includes both completion tokens and reasoning tokens.
+
 ---
 
 ## Troubleshooting
