@@ -19,16 +19,13 @@ async function aiSdkExample() {
       client: { generateText },
       customerId: "customer_123",
       metadata: {
-        model: "gemini-2.0-flash",
-        feature: "chat",
-        userTier: "premium",
-        sessionId: "sess_456",
+        provider: "ai-sdk",
       },
     });
 
     // 3. Use the wrapped function
     const response = await client.generateText({
-      model: google("gemini-2.0-flash"),
+      model: google("gemini-2.5-flash"),
       prompt: "Hello, I am a cool guy! Tell me a fun fact.",
       maxOutputTokens: 500,
     });

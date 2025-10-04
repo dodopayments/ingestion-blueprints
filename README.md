@@ -381,8 +381,7 @@ Every LLM API call automatically sends this data to Dodo Payments:
     "inputTokens": 10,
     "outputTokens": 25, 
     "totalTokens": 35,
-    "model": "gpt-4",
-    "provider": "openai"
+    "model": "gpt-4"
   }
 }
 ```

@@ -81,8 +81,11 @@ export class LLMTracker {
     if (response?.usageMetadata) {
       const usage = response.usageMetadata;
       const inputTokens = usage.promptTokenCount || 0;
-      const outputTokens = usage.candidatesTokenCount || 0;
+      const candidatesTokens = usage.candidatesTokenCount || 0;
+      const thoughtsTokens = usage.thoughtsTokenCount || 0;
+      const outputTokens = candidatesTokens + thoughtsTokens;
       const totalTokens = usage.totalTokenCount || (inputTokens + outputTokens);
+      
       return {
         inputTokens,
         outputTokens,
@@ -116,7 +119,9 @@ export class LLMTracker {
     // AI SDK format
     else if (usage.inputTokens !== undefined) {
       inputTokens = usage.inputTokens || 0;
-      outputTokens = usage.outputTokens || 0;
+      const baseOutputTokens = usage.outputTokens || 0;
+      const reasoningTokens = usage.reasoningTokens || 0;
+      outputTokens = baseOutputTokens + reasoningTokens;
       totalTokens = usage.totalTokens || (inputTokens + outputTokens);
     }
     // Generic format
