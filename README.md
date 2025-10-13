@@ -144,9 +144,7 @@ await trackStreamBytes(ingestion, {
   customerId: 'customer_123',
   bytes: 10485760, // 10MB
   metadata: {
-    stream_type: 'video',
-    quality: '1080p',
-    duration_seconds: 30
+    stream_type: 'video'
   }
 });
 ```
