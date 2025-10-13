@@ -27,9 +27,9 @@ export async function trackTimeRange(
   await ingestion.track({
     customerId: options.customerId,
     metadata: {
-      ...(options.durationMs !== undefined && { duration_ms: options.durationMs }),
-      ...(options.durationSeconds !== undefined && { duration_seconds: options.durationSeconds }),
-      ...(options.durationMinutes !== undefined && { duration_minutes: options.durationMinutes }),
+      ...(options.durationMs !== undefined && { durationMs: options.durationMs }),
+      ...(options.durationSeconds !== undefined && { durationSeconds: options.durationSeconds }),
+      ...(options.durationMinutes !== undefined && { durationMinutes: options.durationMinutes }),
       ...options.metadata
     }
   });
